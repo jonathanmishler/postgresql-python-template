@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+    db:
+        image: postgres
+        volumes: 
+            - ./data/db:/var/lib/postgresql/data
+        restart: always
+        environment:
+            - POSTGRES_DB_FILE=postgres
+            - POSTGRES_USER_FILE=root
+            - POSTGRES_PASSWORD_FILE=default
