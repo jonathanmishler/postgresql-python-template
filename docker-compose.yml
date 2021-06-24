@@ -3,10 +3,18 @@ version: '3.9'
 services:
     db:
         image: postgres
+        ports:
+            - ${DB_PORT}:5432
         volumes: 
             - ./data/db:/var/lib/postgresql/data
         restart: always
         environment:
-            - POSTGRES_DB_FILE=postgres
-            - POSTGRES_USER_FILE=root
-            - POSTGRES_PASSWORD_FILE=default
+            POSTGRES_DB: ${DB_NAME}
+            POSTGRES_USER: ${DB_USERNAME}
+            POSTGRES_PASSWORD_FILE: run/secrets/db_password
+        secrets:
+            - db_password
+
+secrets:
+    db_password:
+        file: ./secrets/db_password
