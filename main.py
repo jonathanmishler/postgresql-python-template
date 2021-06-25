@@ -1,19 +1,27 @@
 from db_utils.connect import connection
 import psycopg3
+from db_utils.tables import *
+from pydantic import BaseModel, Field
 
 
-with connection() as conn:
+class User(BaseModel):
+    id: int
+    name: str = Field(..., max_length=50)
+    title: str = "Sales Clerk"
+    active: bool
+    decimal: float
+    number: int
+
+    class Config:
+        schema_extra = {"primary_key": ["id", "name"], "unique": ["name"], "serial": ["id"]}
+
+
+print(sql_from_schema(User.schema()))
+""" with connection() as conn:
 
     with conn.cursor() as cur:
 
-        cur.execute(
-            """
-            CREATE TABLE IF NOT EXISTS test (
-                id serial PRIMARY KEY,
-                num integer,
-                data text)
-        """
-        )
+        cur.execute()
 
         cur.execute(
             "INSERT INTO test (num, data) VALUES (%s, %s)", (100, "Hello World")
@@ -26,3 +34,4 @@ with connection() as conn:
             print(record)
 
         conn.commit()
+ """
